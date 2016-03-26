@@ -1,7 +1,7 @@
-import threading
 import queue
-import time
-from Player import PlayerState
+import threading
+
+from common.character import PlayerState
 
 battleQueue = queue.Queue()
 
@@ -32,9 +32,14 @@ class BattleManager(threading.Thread):
             current_player.state = PlayerState.DEFENDING
 
         print("Turn over: Current Stats: ")
-        print(current_player.print_stats())
-        print(opponent_player.print_stats())
 
-        battleQueue.put(opponent_player)
-        battleQueue.put(current_player)
+        if opponent_player.get_player_health() <= 0:
+            print(current_player.print_stats())
+            print(str(opponent_player.get_player_name()) + " has been defeated")
+            battleQueue.put(current_player)
+        else:
+            battleQueue.put(opponent_player)
+            battleQueue.put(current_player)
+
+
 

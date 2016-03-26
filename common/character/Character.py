@@ -1,26 +1,23 @@
 
-from Statistics import Statistics
-from Weapon import Weapon
+from common.character.BaseStatistics import Statistics
 
 
 class PlayerState(object):
     NORMAL = 'NORMAL'
     DEFENDING = 'DEFENDING'
 
+
 class Player(object):
 
     def __init__(self, player_name, player_health, player_magic_points, player_speed, player_strength,
-                 player_intelligence, player_weapon):
+                 player_intelligence, player_weapon, magic_abilities=None):
 
         self.player_name = player_name
-
+        self.magic_abilities = magic_abilities
         self.statistics = Statistics(player_health, player_magic_points, player_strength, player_speed,
                                      player_intelligence)
-
         self.state = PlayerState.NORMAL
-
         self.weapon = player_weapon
-
         self.stat_map = {
             "str": self.set_player_strength,
             "mp": self.set_player_magic,
@@ -28,13 +25,13 @@ class Player(object):
             "int": self.set_player_int,
             "hp": self.set_player_health
         }
-
         self.apply_modifier("apply")
 
     def print_actions(self):
         action_string = self.player_name + "'s Command List: \n"
         action_string += "1: Attack\n"
-        action_string += "2: Defend\n"
+        action_string += "2: Magic\n"
+        action_string += "3: Defend\n"
         return action_string
 
     def print_stats(self):
